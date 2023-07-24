@@ -1,4 +1,4 @@
-class timeBlock {
+class timeBlock { // a little (probably poor) class implementation just for fun
     constructor(id, textContent = '') {
         this.id = id;
         this.textContent = textContent;

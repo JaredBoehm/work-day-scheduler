@@ -1,16 +1,23 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
 $(function () {
     // display the current date in the header of the page
-    $('#currentDay').text(dayjs());
+    $('#currentDay').text(Date());
+    setInterval(() => {
+        $('#currentDay').text(Date());
+    }, 1000);
 
-    // TODO: Add a listener for click events on the save button. This code should
-    // use the id in the containing time-block as a key to save the user input in
-    // local storage. HINT: What does `this` reference in the click listener
-    // function? How can DOM traversal be used to get the "hour-x" id of the
-    // time-block containing the button that was clicked? How might the id be
-    // useful when saving the description in local storage?
+    // on save button click, display feedback to user and save the textarea's value to local storage
+    $('.container-fluid').on('click', '.saveBtn', (event) => {
+        let currentTarget = event.currentTarget;
+        // feedback display
+        $(currentTarget).html('Saved!');
+        setTimeout(() => { // reset after half a second
+            $(currentTarget).html('<i class="fas fa-save" aria-hidden="true"></i>');
+        }, 500);
+        // get the parents id (also the local storage key), save value of textContent
+        let id = $(currentTarget).parent().attr('id');
+        let textContent = $(currentTarget).siblings('textarea').val();
+        localStorage.setItem(id, textContent);
+    });
 
     // apply the past, present, or future class to each time block, grab text content (from local storage, this is done by loadTimeBlocks() in data.js),
     function displayTimeBlocks() {
@@ -38,6 +45,6 @@ $(function () {
         });
     }
     displayTimeBlocks();
-    setInterval(displayTimeBlocks, 30000); // update time blocks every thirty seconds
-
+    // currently time blocks are only updated when the page is refreshed, could set a timeout/interval for live refreshing 
+    // setInterval(displayTimeBlocks, 300000); // update time blocks every five minutes
 });
